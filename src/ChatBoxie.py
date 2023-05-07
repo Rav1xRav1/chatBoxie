@@ -71,7 +71,9 @@ def main(page: ft.Page):
     def send_message_click(e):
         if new_message.value != "":
             page.pubsub.send_all(Message(page.session.get("user_name"), new_message.value, message_type="chat_message"))
-            on_message(Message("BAI Chat", ''.join(theb.Completion.create(prompt=new_message.value)), message_type="chat_message"))
+            res = ''.join(theb.Completion.create(prompt=new_message.value))
+            # on_message(Message("BAI Chat", res, message_type="chat_message"))
+            page.pubsub.send_all(Message("BAI Chat", res, message_type="chat_message"))
             new_message.value = ""
             new_message.focus()
             page.update()
