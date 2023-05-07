@@ -53,7 +53,7 @@ class ChatMessage(ft.Row):
 
 def main(page: ft.Page):
     page.horizontal_alignment = "stretch"
-    page.title = "Flet Chat"
+    page.title = "Flet Chat with BAI Chat"
 
     def join_chat_click(e):
         if not join_user_name.value:
@@ -71,10 +71,11 @@ def main(page: ft.Page):
     def send_message_click(e):
         if new_message.value != "":
             page.pubsub.send_all(Message(page.session.get("user_name"), new_message.value, message_type="chat_message"))
-            res = ''.join(theb.Completion.create(prompt=new_message.value))
-            # on_message(Message("BAI Chat", res, message_type="chat_message"))
-            page.pubsub.send_all(Message("BAI Chat", res, message_type="chat_message"))
+            message = new_message.value
             new_message.value = ""
+            new_message.update()
+            res = ''.join(theb.Completion.create(prompt=message))
+            page.pubsub.send_all(Message("BAI Chat", res, message_type="chat_message"))
             new_message.focus()
             page.update()
 
@@ -144,4 +145,4 @@ def main(page: ft.Page):
     )
 
 
-ft.app(port=8550, target=main, view=ft.WEB_BROWSER)
+ft.app(target=main)
